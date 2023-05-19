@@ -1,0 +1,30 @@
+<div id="gpt-mail-suggest" data-radix-popper-content-wrapper=""
+    style="position: fixed; left: 0px; top: 0px; transform: translate3d(0px, 0px, 0px); min-width: max-content; z-index: 10; --radix-popper-transform-origin: 50% 106px;">
+    <div data-side="top" data-align="center" data-state="open" role="dialog" id="radix-:r7:"
+        class="w-[350px] z-10 relative bg-white1 shadow-lg rounded-md p-4 space-y-4" tabindex="-1"
+        style="--radix-popover-content-transform-origin: var(--radix-popper-transform-origin);">
+        <div class="flex justify-between items-center text-sm">Type summary
+            <button id="gpt-mail-suggest-close-btn" class="border-0 bg-transparent p-0 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-4 h-4 text-gray-700">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <form>
+            <div class="relative mt-4">
+                <textarea id="gpt-mail-suggest-text"
+                    class="form-input text-sm block w-[90%] rounded-md !border-gray-300 py-2 px-3 focus:border-blue-500 border-solid"
+                    placeholder="" rows="1" style="resize:none; overflow:hidden; vertical-align: top; height: 70px"></textarea>
+                <div class="absolute top--48 right-40 mt-[0.60rem] mr-3">
+                    <svg id="reply-gpt-mail-suggest-btn" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 text-black cursor-pointer">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+{
+  "name": "Chat GPT Translate",
+  "description": "Chat GPT Translate!",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "css": [ "template/template.css" ],
+      "matches": ["*://mail.google.com/*"],
+      "js": ["gmail.js"]
+    }
+  ],
+  "permissions": ["storage", "activeTab", "scripting", "contextMenus", "tabs", "nativeMessaging"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "24": "/images/icons8-ai-24.png",
+      "48": "/images/icons8-ai-48.png",
+      "96": "/images/icons8-ai-96.png"
+    }
+  },
+  "icons": {
+    "24": "/images/icons8-ai-24.png",
+    "48": "/images/icons8-ai-48.png",
+    "96": "/images/icons8-ai-96.png"
+  },
+  "options_page": "options.html",
+  "web_accessible_resources": [
+    {
+      "resources": ["template/*", "images/*"],
+      "matches": ["*://mail.google.com/*"],
+      "use_dynamic_url": false
+    }
+  ]
+}

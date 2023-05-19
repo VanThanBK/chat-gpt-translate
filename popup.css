@@ -1,0 +1,22 @@
+/* Thiết lập kích thước cho popup */
+body {
+  width: 400px;
+  /* Đổi giá trị này tùy theo kích thước của popup */
+  height: 580px;
+  /* Đổi giá trị này tùy theo kích thước của popup */
+  margin: 2;
+  padding: 0;
+  position: relative;
+}
+
+.text-container {
+  /* width: 380px; */
+  height: 300px;
+  border: 1px solid #333;
+  padding: 6px;
+  background-color: #eee;
+  font-size: 14px;
+  color: #333;
+  border-radius: 4px;
+  overflow-y: scroll;
+}
