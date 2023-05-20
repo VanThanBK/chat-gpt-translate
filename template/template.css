@@ -170,7 +170,7 @@
 }
 
 .w-\[90\%\] {
-    width: 90%;
+    width: 98%;
 }
 
 .form-input,
@@ -237,6 +237,10 @@
 
 .font-medium {
     font-weight: 500;
+}
+
+.p-0 {
+    padding: 0px;
 }
 
 .duration-150 {
@@ -335,6 +339,10 @@
 
 .w-auto {
     width: auto;
+}
+
+.w-5 {
+    width: 1.25rem;
 }
 
 .h-5 {

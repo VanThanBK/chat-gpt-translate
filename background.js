@@ -8,6 +8,9 @@ let lastResponseFromChatGPT = "";
 let email_wait_response = false;
 let current_gmail_tab_wait_response = null;
 
+let translate_wait_response = false;
+let current_translate_tab_wait_response = null;
+
 chrome.runtime.onConnect.addListener(function (port) {
   if (port.name === "fromPopup") {
     popupOpen = true;
@@ -30,6 +33,11 @@ function sendLastResponseToEmail() {
   });
 }
 
+function sendLastResponseToTranslate() {
+  chrome.tabs.sendMessage(current_translate_tab_wait_response, { type: 'gptLastResponseToTranslate', data: lastResponseFromChatGPT }, function (response) {
+  });
+}
+
 // tạo nút gpt trong chuột phải
 chrome.contextMenus.remove("rightMouseGptTranslate", function () {
   if (chrome.runtime.lastError) {
@@ -44,11 +52,14 @@ chrome.contextMenus.remove("rightMouseGptTranslate", function () {
 
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
   if (info.menuItemId === "rightMouseGptTranslate") {
-    if (info.selectionText != "") {
-      let buffer_text = "Dịch giúp tôi mail sau:" + '\n';
-      buffer_text += info.selectionText;
-      pasteToTranslateTabInChatGPT(buffer_text);
-    }
+    // if (info.selectionText != "" && info.selectionText != null) {
+    //   let buffer_text = "Dịch giúp tôi mail sau:" + '\n';
+    //   buffer_text += info.selectionText;
+    //   pasteToTranslateTabInChatGPT(buffer_text);
+    // }
+    chrome.tabs.sendMessage(tab.id, { type: 'showGptTranslatePopup'}, function (response) {
+      // console.log(response);
+    });
   }
 });
 
@@ -71,7 +82,7 @@ function pasteToTranslateTabInChatGPT(input_text) {
               setTimeout(function () {
                 addScriptingToChatGptTab(tabId, input_text);
               }, 2500);
-              
+
               chrome.tabs.onUpdated.removeListener(listener);
             }
           });
@@ -134,12 +145,12 @@ function waitLastResponseInGPT() {
           let latestResponseGroup = responseGroup[responseGroup.length - 1];
           let lastResponseDiv = latestResponseGroup.querySelector('.markdown.prose.w-full.break-words');
 
-          // let lastResponseText = lastResponseDiv.textContent;
+          let lastResponseText1 = lastResponseDiv.textContent;
           let lastResponseText = lastResponseDiv.innerHTML;
           // console.log(lastResponseText);
 
           //gửi dữ liệu tới background
-          chrome.runtime.sendMessage({ type: 'responseFromChatGPT', data: lastResponseText }, function (response) {
+          chrome.runtime.sendMessage({ type: 'responseFromChatGPT', data: lastResponseText , data1: lastResponseText1}, function (response) {
             // console.log(response);
           });
         }
@@ -163,6 +174,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       sendLastResponseToEmail();
       email_wait_response = false;
     }
+    if (translate_wait_response) {
+      lastResponseFromChatGPT = request.data1
+      sendLastResponseToTranslate();
+      translate_wait_response = false;
+    }
   }
   else if (request.type === 'requestReplyEmail') {
     pasteToTranslateTabInChatGPT(request.data);
@@ -172,5 +188,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   else if (request.type == 'openOptionsPage') {
     chrome.runtime.openOptionsPage();
+  }
+  else if (request.type == 'requestGptTranslate') {
+    pasteToTranslateTabInChatGPT(request.data);
+    sendResponse({ result: "Done" });
+    current_translate_tab_wait_response = sender.tab.id;
+    translate_wait_response = true;
   }
 });

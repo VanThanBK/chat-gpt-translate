@@ -8,13 +8,40 @@
   },
   "content_scripts": [
     {
-      "css": [ "template/template.css" ],
-      "matches": ["*://mail.google.com/*"],
-      "js": ["gmail.js"]
+      "css": [
+        "template/template.css"
+      ],
+      "matches": [
+        "*://mail.google.com/*"
+      ],
+      "js": [
+        "gmail.js"
+      ]
+    },
+    {
+      "css": [
+        "template/all_content_scripts.css"
+      ],
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "all_content_scripts.js"
+      ]
     }
   ],
-  "permissions": ["storage", "activeTab", "scripting", "contextMenus", "tabs", "nativeMessaging"],
-  "host_permissions": ["http://*/*", "https://*/*"],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "contextMenus",
+    "tabs",
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -31,8 +58,15 @@
   "options_page": "options.html",
   "web_accessible_resources": [
     {
-      "resources": ["template/*", "images/*"],
-      "matches": ["*://mail.google.com/*"],
+      "resources": [
+        "template/*",
+        "images/*"
+      ],
+      "matches": [
+        "*://mail.google.com/*",
+        "*://web.whatsapp.com/*",
+        "*://*/*"
+      ],
       "use_dynamic_url": false
     }
   ]
