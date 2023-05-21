@@ -89,7 +89,7 @@
 }
 
 .tr-w-\[90\%\] {
-    width: 95%;
+    width: 93%;
 }
 
 .\!tr-border-gray-300 {
@@ -160,7 +160,7 @@
     padding: 0px;
 }
 
-.antialiased {
+.tr-antialiased {
     -webkit-font-smoothing: antialiased;
 }
 

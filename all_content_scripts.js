@@ -30,7 +30,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     else if (request.type === 'gptLastResponseToTranslate') {
         sendResponse({ result: "Done" });
 
-        let divSuggest = document.querySelector('div[id="gpt-mail-suggest"]');
+        let divSuggest = document.querySelector('div[id="gpt-translate-suggest"]');
         if (divSuggest) {
             divSuggest.remove();
         }
@@ -68,7 +68,7 @@ function copyToClipboard(text) {
 }
 
 function injectedGptTranslateLoading() {
-    let reply_gpt_mail_suggest_btn = document.querySelector('#reply-gpt-mail-suggest-btn');
+    let reply_gpt_mail_suggest_btn = document.querySelector('#reply-gpt-translate-suggest-btn');
 
     reply_gpt_mail_suggest_btn.insertAdjacentHTML('beforebegin', '<div class="tr-spinner"></div>');
 }
@@ -88,15 +88,15 @@ function showGptTranslatePopup() {
         popup_x_pos = _width - 400;
     }
 
-    injectedGptMailSuggest(popup_x_pos, popup_y_pos);
+    injectedGptTranslateSuggest(popup_x_pos, popup_y_pos);
 }
 
-let current_x_mail_suggest = 0;
-let current_y_mail_suggest = 0;
+let current_x_translate_suggest = 0;
+let current_y_translate_suggest = 0;
 
-function gpt_mail_suggest_close_btn_click(event) {
+function gpt_translate_suggest_close_btn_click(event) {
     if (event.button === 0) {
-        let divSuggest = document.querySelector('div[id="gpt-mail-suggest"]');
+        let divSuggest = document.querySelector('div[id="gpt-translate-suggest"]');
 
         if (divSuggest) {
             divSuggest.remove();
@@ -104,10 +104,10 @@ function gpt_mail_suggest_close_btn_click(event) {
     }
 }
 
-function reply_gpt_mail_suggest_btn_click(event) {
+function reply_gpt_translate_suggest_btn_click(event) {
     if (event.button === 0) {
         let buffer_text = "Dịch giúp tôi những ý sau:" + '\n';
-        let gpt_mail_suggest_text = document.querySelector('#gpt-mail-suggest-text');
+        let gpt_mail_suggest_text = document.querySelector('#gpt-translate-suggest-text');
         if (gpt_mail_suggest_text.value === "") {
             return;
         }
@@ -121,7 +121,7 @@ function reply_gpt_mail_suggest_btn_click(event) {
     }
 }
 
-function injectedGptMailSuggest(x_pos, y_pos) {
+function injectedGptTranslateSuggest(x_pos, y_pos) {
     let body_bufer = document.body;
     let lastDiv = body_bufer.lastElementChild;
 
@@ -129,15 +129,15 @@ function injectedGptMailSuggest(x_pos, y_pos) {
         return;
     }
 
-    let divSuggest = document.querySelector('div[id="gpt-mail-suggest"]');
+    let divSuggest = document.querySelector('div[id="gpt-translate-suggest"]');
 
     if (divSuggest) {
         divSuggest.remove();
         return;
     }
 
-    current_x_mail_suggest = x_pos;
-    current_y_mail_suggest = y_pos;
+    current_x_translate_suggest = x_pos;
+    current_y_translate_suggest = y_pos;
 
     fetch(chrome.runtime.getURL('template/translate_popup.html'))
         .then(response => response.text())
@@ -148,25 +148,25 @@ function injectedGptMailSuggest(x_pos, y_pos) {
         });
 
     setTimeout(function () {
-        divSuggest = document.querySelector('div[id="gpt-mail-suggest"]');
+        divSuggest = document.querySelector('div[id="gpt-translate-suggest"]');
         // console.log(divSuggest);
         if (divSuggest) {
-            let gpt_mail_suggest_close_btn = document.querySelector('#gpt-mail-suggest-close-btn');
-            let reply_gpt_mail_suggest_btn = document.querySelector('#reply-gpt-mail-suggest-btn');
-            let gpt_mail_suggest_text = document.querySelector('#gpt-mail-suggest-text');
+            let gpt_mail_suggest_close_btn = document.querySelector('#gpt-translate-suggest-close-btn');
+            let reply_gpt_mail_suggest_btn = document.querySelector('#reply-gpt-translate-suggest-btn');
+            let gpt_mail_suggest_text = document.querySelector('#gpt-translate-suggest-text');
 
-            gpt_mail_suggest_close_btn.addEventListener('click', gpt_mail_suggest_close_btn_click);
-            reply_gpt_mail_suggest_btn.addEventListener('click', reply_gpt_mail_suggest_btn_click);
-            gpt_mail_suggest_text.addEventListener('input', autoResizeSuggestText, false);
+            gpt_mail_suggest_close_btn.addEventListener('click', gpt_translate_suggest_close_btn_click);
+            reply_gpt_mail_suggest_btn.addEventListener('click', reply_gpt_translate_suggest_btn_click);
+            gpt_mail_suggest_text.addEventListener('input', autoResizeSuggestTextTran, false);
 
-            gpt_mail_suggest_text.value = last_gpt_mail_suggest_text_value;
+            gpt_mail_suggest_text.value = last_gpt_translate_suggest_text_value;
         }
     }, 500);
 }
 
-let last_gpt_mail_suggest_text_value = "";
+let last_gpt_translate_suggest_text_value = "";
 
-function autoResizeSuggestText() {
+function autoResizeSuggestTextTran() {
     this.style.height = 'auto';
     let new_text_height = this.scrollHeight;
     if (new_text_height < 70) {
@@ -180,13 +180,13 @@ function autoResizeSuggestText() {
         this.style.overflowY = 'hidden';
     }
 
-    let new_y_mail_suggest = current_y_mail_suggest - (new_text_height - 70);
-    let new_x_mail_suggest = current_x_mail_suggest;
+    let new_y_translate_suggest = current_y_translate_suggest - (new_text_height - 70);
+    let new_x_translate_suggest = current_x_translate_suggest;
 
-    let divSuggest = document.querySelector('div[id="gpt-mail-suggest"]');
-    divSuggest.style.transform = `translate3d(${new_x_mail_suggest}px, ${new_y_mail_suggest}px, 0px)`;
+    let divSuggest = document.querySelector('div[id="gpt-translate-suggest"]');
+    divSuggest.style.transform = `translate3d(${new_x_translate_suggest}px, ${new_y_translate_suggest}px, 0px)`;
 
     this.style.height = new_text_height + 'px';
 
-    last_gpt_mail_suggest_text_value = this.value;
+    last_gpt_translate_suggest_text_value = this.value;
 }

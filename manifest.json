@@ -9,13 +9,13 @@
   "content_scripts": [
     {
       "css": [
-        "template/template.css"
+        "template/template.css", "template/all_content_scripts.css"
       ],
       "matches": [
         "*://mail.google.com/*"
       ],
       "js": [
-        "gmail.js"
+        "gmail.js", "all_content_scripts.js"
       ]
     },
     {
@@ -24,6 +24,9 @@
       ],
       "matches": [
         "*://*/*"
+      ],
+      "exclude_matches": [
+        "*://mail.google.com/*"
       ],
       "js": [
         "all_content_scripts.js"
