@@ -57,7 +57,7 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
     //   buffer_text += info.selectionText;
     //   pasteToTranslateTabInChatGPT(buffer_text);
     // }
-    chrome.tabs.sendMessage(tab.id, { type: 'showGptTranslatePopup'}, function (response) {
+    chrome.tabs.sendMessage(tab.id, { type: 'showGptTranslatePopup' }, function (response) {
       // console.log(response);
     });
   }
@@ -110,16 +110,44 @@ function addTextToInputInPageAndEnter(input_text) {
   if (input) {
     input.value = input_text;
 
-    var enterKeyEvent = new KeyboardEvent('keydown', {
-      key: 'Enter',
-      code: 'Enter',
-      keyCode: 13,
-      charCode: 13,
-      bubbles: true,
-      cancelable: true,
-      view: window,
-    });
-    input.dispatchEvent(enterKeyEvent);
+    const button_gpt = document.querySelector('.absolute.p-1.rounded-md');
+    if (button_gpt) {
+      button_gpt.removeAttribute('disabled');
+      button_gpt.style.backgroundColor = 'rgb(25, 195, 125)';
+
+      const clickEvent = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true
+      });
+
+      button_gpt.dispatchEvent(clickEvent);
+    } else {
+      console.log('Không tìm thấy button');
+    }
+
+    // var enterKeyEvent = new KeyboardEvent('keydown', {
+    //   key: 'Enter',
+    //   code: 'Enter',
+    //   keyCode: 13,
+    //   charCode: 13,
+    //   bubbles: true,
+    //   cancelable: true,
+    //   view: window,
+    // });
+    // input.dispatchEvent(enterKeyEvent);
+
+    // var keyUpEvent = new KeyboardEvent('keyup', {
+    //   key: 'Enter',
+    //   code: 'Enter',
+    //   keyCode: 13,
+    //   charCode: 13,
+    //   bubbles: true,
+    //   cancelable: true,
+    //   view: window
+    // });
+
+    // input.dispatchEvent(keyUpEvent);
   }
   else {
     console.log("Không tìm thấy ô input");
@@ -132,7 +160,7 @@ function waitLastResponseInGPT() {
     // console.log("CallbackBtn...");
     for (let mutation of mutationsList) {
       if (mutation.type === 'childList') {
-
+        // console.log("chatgptchange");
         let responseElements = document.querySelectorAll('.flex.w-full.gap-2.items-center.justify-center');
         let latestResponseElement = responseElements[responseElements.length - 1];
         let responseText = latestResponseElement.innerText;
@@ -150,7 +178,7 @@ function waitLastResponseInGPT() {
           // console.log(lastResponseText);
 
           //gửi dữ liệu tới background
-          chrome.runtime.sendMessage({ type: 'responseFromChatGPT', data: lastResponseText , data1: lastResponseText1}, function (response) {
+          chrome.runtime.sendMessage({ type: 'responseFromChatGPT', data: lastResponseText, data1: lastResponseText1 }, function (response) {
             // console.log(response);
           });
         }
@@ -159,9 +187,15 @@ function waitLastResponseInGPT() {
   };
 
   const observer_btn = new MutationObserver(callbackbtn);
-  let targetNodebtn = document.querySelector('.h-full.flex.ml-1.gap-0.justify-center');
-  let configbtn = { childList: true, subtree: true };
-  observer_btn.observe(targetNodebtn, configbtn);
+  // let targetNodebtn = document.querySelector('.relative.h-full.w-full.transition-width.flex.lex-col');
+  let targetNodebtn = document.querySelector('div.relative.flex.h-full.max-w-full.flex-1.overflow-hidden');
+  if (targetNodebtn) {
+    let configbtn = { childList: true, subtree: true };
+    observer_btn.observe(targetNodebtn, configbtn);
+  }
+  else {
+    console.log("khong có: targetNodebtn");
+  }
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
